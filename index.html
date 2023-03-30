@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script async src="index.js" type="text/javascript"></script>
+  <title>Quiz</title>
+</head>
+<body>
+  <div class="container">
+    <div class="questionBody">
+    <h1 class="questionHeading">Very cool quiz</h1>
+    <div class="quizBody">
+    <div class="questionDescription" id="questionDescription">
+      Question description
+    </div>
+    <ul class="questionVariants">
+      <li>
+        <input name="answer" class="answer radio" type="radio" id="a" checked><label id="label_a" for="a"></label>
+      </li>
+      <li>
+        <input name="answer" class="answer radio" type="radio" id="b"><label id="label_b" for="b"></label>
+      </li>
+      <li>
+        <input name="answer" class="answer radio" type="radio" id="c"><label id="label_c" for="c"></label>
+      </li>
+      <li>
+        <input name="answer" class="answer radio" type="radio" id="d"><label id="label_d" for="d"></label>
+      </li>
+    </ul>
+    </div>
+    <div id="attention"></div>
+  </div>
+  <a id="nextButton">Next Question</a>
+  </div>
+</body>
+</html>

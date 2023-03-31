@@ -1,3 +1,4 @@
-# Quiz
+# Quiz generated
 
-Four hard-coded question. Choose wisely.
+Random generated questions. 
+Length of quiz from 3 to 10 questions.

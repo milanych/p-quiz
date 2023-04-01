@@ -1,20 +1,23 @@
-async function fetchTriviaQuestion() {
-  const response = await fetch('https://the-trivia-api.com/api/questions?limit=1');
-  const jsonData = await response.json();
-  jsonData.forEach(el => {
-    processData(el);
-  });
-}
-
-//Initial call
-fetchTriviaQuestion();
-
-
-//Случайное количество вопросов: от 3 до 10
+//Random quantity of questions (3 to 10)
 const randomNumber = () => {
   return Math.floor(Math.random() * (10 - 3) + 3)
 }
 const quantity = randomNumber()
+
+//API call
+async function fetchTriviaQuestion() {
+  const response = await fetch(`https://the-trivia-api.com/api/questions?limit=${quantity}`);
+  const jsonData = await response.json();
+  jsonData.forEach(el => {
+    data.push(el)
+  })
+  processData(data)
+}
+
+//Initial data call
+fetchTriviaQuestion();
+
+//Global variables
 const questionList = document.querySelector('.quizBody')
 const submitButton = document.querySelector("#nextButton");
 const answers = document.querySelectorAll('.answer')
@@ -24,10 +27,23 @@ let result = 0;
 let i = 1;
 let answerLetters = ['a', 'b', 'c', 'd'];
 let indexOfCorrectAnswer;
+let data = [];
 
+
+//API call
+async function fetchTriviaQuestion() {
+  const response = await fetch(`https://the-trivia-api.com/api/questions?limit=${quantity}`);
+  const jsonData = await response.json();
+  jsonData.forEach(el => {
+    data.push(el)
+  })
+  processData(data)
+}
+
+//Question generator
 function processData(data) {
-  document.querySelector("#questionDescription").innerHTML = data.question;
-  let answersList = [data.incorrectAnswers[0], data.incorrectAnswers[1], data.incorrectAnswers[2], data.correctAnswer];
+  document.querySelector("#questionDescription").innerHTML = data[currentQuestion].question;
+  let answersList = [data[currentQuestion].incorrectAnswers[0], data[currentQuestion].incorrectAnswers[1], data[currentQuestion].incorrectAnswers[2], data[currentQuestion].correctAnswer];
 
   let shuffledAnswers = [];
   shuffle(answersList);
@@ -37,15 +53,13 @@ function processData(data) {
     shuffledAnswers.push(currentAnswer);
   }
 
-  indexOfCorrectAnswer = shuffledAnswers.indexOf(data.correctAnswer);
+  indexOfCorrectAnswer = shuffledAnswers.indexOf(data[currentQuestion].correctAnswer);
   document.querySelector("#label_a").innerHTML = shuffledAnswers[0];
   document.querySelector("#label_b").innerHTML = shuffledAnswers[1];
   document.querySelector("#label_c").innerHTML = shuffledAnswers[2];
   document.querySelector("#label_d").innerHTML = shuffledAnswers[3];
   questionIterator();
-
 }
-
 
 function isSelected() {
   let answer = undefined;
@@ -88,35 +102,34 @@ function questionIterator() {
   i++;
 }
 
-
-
 function getResult() {
   deselectAnswers();
   currentQuestion++;
   if (currentQuestion < quantity) {
-    fetchTriviaQuestion();
+    processData(data)
   } else {
     questionList.innerHTML = `Your result: <b>${result}/${quantity}</b> questions`;
     document.querySelector("#nextButton").remove();
     document.getElementById('attention').innerHTML = ''
-    let emoji = document.createElement('p');
-    emoji.classList.add('emoji');
-    document.querySelector(".quizBody").append(emoji);
     if (result <= quantity / 2 && result > 0) {
-      emoji.innerHTML = '☹️';
-      document.querySelector(".questionHeading").innerHTML = 'Try harder!'
+      resultText('Try harder!', '☹️')
     } else if (result === 0) {
-      emoji.innerHTML = '🤷‍♂️';
-      document.querySelector(".questionHeading").innerHTML = 'No comment...'
+      resultText('No comment...', '🤷‍♂️')
     } else if (result > quantity / 2 && result < quantity) {
-      emoji.innerHTML = '🙂';
-      document.querySelector(".questionHeading").innerHTML = 'Very good!'
+      resultText('Very good!', '🙂')
     } else if (result === quantity) {
-      emoji.innerHTML = '😎';
-      document.querySelector(".questionHeading").innerHTML = 'Perfect!'
+      resultText('Perfect!', '😎')
     }
     createRepeatLink()
   }
+}
+
+const resultText = (text, em) => {
+  let emoji = document.createElement('p');
+  emoji.classList.add('emoji');
+  document.querySelector(".quizBody").append(emoji);
+  emoji.innerHTML = em;
+  document.querySelector(".questionHeading").innerHTML = text;
 }
 
 function answerChosen() {
